@@ -16,12 +16,6 @@
       margin: 0 auto;
     }
 
-    .status-text {
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: #d63384;
-    }
-
     .progress-bar {
       width: 100%;
       height: 30px;
@@ -39,23 +33,23 @@
       height: 100%;
       padding: 0;
       margin: 0;
-      margin-right: -3px;
+      margin-right: -2px;
     }
 
     .tick {
       flex-grow: 1;
       height: 100%;
       background-color: #ff69b4;
-      margin-right: 3px; /* 加大gap */
+      margin-right: 2px;
       opacity: 0;
       transform: scaleY(0.8);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: opacity 0.1s ease, transform 0.1s ease;
     }
 
     .tick.visible {
       opacity: 1;
       transform: scaleY(1.2);
-      animation: bounce 0.4s ease forwards;
+      animation: bounce 0.1s ease forwards;
     }
 
     @keyframes bounce {
@@ -65,41 +59,27 @@
     }
 
     .progress-text {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      left: 0;
-      line-height: 30px;
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      pointer-events: none;
       display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="status-text">排队抢票中...</div>
     <div class="progress-bar">
       <div class="ticks-container" id="ticksContainer"></div>
-      <div class="progress-text" id="progressText">0%</div>
+      <div class="progress-text" id="progressText"></div>
     </div>
   </div>
 
   <script>
-    const totalDuration = 50 * 1000; // 修改为50秒
-    const stopAt = 0.4; // 40%
-    const stopTime = totalDuration * stopAt; // 20秒
-
-    const totalTicks = 100;
-    const ticksToShow = Math.floor(totalTicks * stopAt); // 40个tick
-    const tickInterval = stopTime / ticksToShow;
+    const totalDuration = 15000; // 加载到10% 的总时间（15秒）
+    const totalTicks = 200;      // 分成200个 segments
+    const ticksToShow = Math.floor(totalTicks * 0.20); // 显示前20%，即40个
+    const tickInterval = totalDuration / ticksToShow;  // 每次显示间隔
 
     const ticksContainer = document.getElementById("ticksContainer");
-    const progressText = document.getElementById("progressText");
 
-    // 初始化100个tick
+    // 创建200个tick
     for (let i = 0; i < totalTicks; i++) {
       const tick = document.createElement("div");
       tick.classList.add("tick");
@@ -114,12 +94,7 @@
         tickElements[currentTick].classList.add("visible");
         currentTick++;
       } else {
-        clearInterval(timer);
-        progressText.textContent = "40%";
-        progressText.style.display = "block";
-        setTimeout(() => {
-          alert("你的号码牌是 123，请记住该号码并返回问卷界面回答相关问题。");
-        }, 300);
+        clearInterval(timer); // 停止动画
       }
     }, tickInterval);
   </script>
